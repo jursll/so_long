@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 12:20:51 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/10 18:02:53 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/10 18:45:36 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,6 @@ static int	validate_elements(t_game *game)
 {
 	int	i;
 	int	j;
-
-	// Initialiser les compteurs
-	game->map.player_count = 0;
-	game->map.collect_count = 0;
-	game->map.exit_count = 0;
 
 	i = 0;
 	while (i < game->map.height)

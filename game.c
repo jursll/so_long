@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:45:33 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/10 18:36:43 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/10 19:27:12 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,66 +27,23 @@ int	handle_key(int keycode, t_game *game)
 		move_player(game, 1, 0);
 	else if (keycode == DOWN || keycode == S)
 		move_player(game, 0, 1);
-	else if (keycode == 65451) // '+' augmente la taille
+	else if (keycode == 65451) // '+'
 	{
 		game->window_width += 100;
 		game->window_height += 100;
 		ft_printf("Increasing window size to %dx%d\n", game->window_width, game->window_height);
-
-		// Détruire l'ancienne fenêtre et recréer une nouvelle avec les dimensions mises à jour
-		mlx_destroy_window(game->mlx, game->window);
-		game->window = mlx_new_window(game->mlx, game->window_width, game->window_height, "So Long");
-		if (!game->window)
-		{
-			ft_printf("ERROR: Failed to create resized window\n");
-			close_game(game);
-		}
-
-		// Re-render la carte
-		render_map(game);
+		resize_and_render(game);
 	}
-	else if (keycode == 65453) // '-' réduit la taille
+	else if (keycode == 65453) // '-'
 	{
 		if (game->window_width > 200 && game->window_height > 200)
 		{
 			game->window_width -= 100;
 			game->window_height -= 100;
 			ft_printf("Decreasing window size to %dx%d\n", game->window_width, game->window_height);
-
-			// Détruire l'ancienne fenêtre et recréer une nouvelle avec les dimensions mises à jour
-			mlx_destroy_window(game->mlx, game->window);
-			game->window = mlx_new_window(game->mlx, game->window_width, game->window_height, "So Long");
-			if (!game->window)
-			{
-				ft_printf("ERROR: Failed to create resized window\n");
-				close_game(game);
-			}
-
-			// Re-render la carte
-			render_map(game);
+			resize_and_render(game);
 		}
 	}
-	return (0);
-}
-
-int	resize_window(t_game *game)
-{
-	int	screen_width;
-	int	screen_height;
-
-	if (!game || !game->mlx || !game->window)
-		return (0);
-
-	// Récupère la taille actuelle de l'écran
-	mlx_get_screen_size(game->mlx, &screen_width, &screen_height);
-
-	// Ajuste les dimensions de la fenêtre pour qu'elles respectent la taille de la carte
-	game->window_width = (screen_width < game->map.width * 64) ? screen_width : game->map.width * 64;
-	game->window_height = (screen_height < game->map.height * 64) ? screen_height : game->map.height * 64;
-
-	// Redessine la carte avec les nouvelles dimensions
-	render_map(game);
-	ft_printf("Window resized to: %d x %d\n", game->window_width, game->window_height);
 	return (0);
 }
 

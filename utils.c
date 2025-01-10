@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:21:35 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/10 15:45:30 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/10 18:47:26 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ char	**allocate_map(int height)
 	char	**map;
 	int		i;
 
-	map = malloc(sizeof(char *) * (height + 1)); // +1 pour le NULL final
+	map = malloc(sizeof(char *) * (height + 1));
 	if (!map)
 		return (NULL);
 	i = 0;
-	while (i < height + 1) // Assure que toutes les cases jusqu'à height + 1 sont NULL
+	while (i < height + 1)
 	{
 		map[i] = NULL;
 		i++;

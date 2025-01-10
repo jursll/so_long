@@ -6,7 +6,7 @@
 #    By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/05 17:29:03 by julrusse          #+#    #+#              #
-#    Updated: 2025/01/09 15:41:51 by julrusse         ###   ########.fr        #
+#    Updated: 2025/01/10 17:21:00 by julrusse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,9 +25,14 @@ INCLUDES = -I includes -I $(LIBFT_DIR) -I $(MLX_DIR)
 
 SRC =	read_map.c \
 		utils.c \
+		validate_map.c \
+		validate_path.c \
 		render.c \
+		game.c \
 		main.c
-OBJ = $(SRC:.c=.o)
+
+OBJ_DIR = obj
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
 # Règles principales
 all: $(LIBFT) $(MLX) $(NAME)
@@ -49,13 +54,14 @@ $(NAME): $(OBJ)
 	@ranlib $(NAME)
 
 # Compile les fichiers .c en .o
-%.o: %.c
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(OBJ_DIR)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 # Nettoyage des objets du projet
 clean:
 	@echo "Cleaning objects..."
-	@rm -f $(OBJ)
+	@rm -rf $(OBJ_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) clean
 	@$(MAKE) -C $(MLX_DIR) clean
 

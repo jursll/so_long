@@ -5,43 +5,43 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/09 15:25:36 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/09 18:52:33 by julrusse         ###   ########.fr       */
+/*   Created: 2025/01/05 17:21:35 by julrusse          #+#    #+#             */
+/*   Updated: 2025/01/10 15:45:30 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/so_long.h"
 
-void	free_map(char **map, int lines)
+char	**allocate_map(int height)
 {
-	int i;
+	char	**map;
+	int		i;
 
+	map = malloc(sizeof(char *) * (height + 1)); // +1 pour le NULL final
+	if (!map)
+		return (NULL);
 	i = 0;
-	while (i < lines)
+	while (i < height + 1) // Assure que toutes les cases jusqu'à height + 1 sont NULL
+	{
+		map[i] = NULL;
+		i++;
+	}
+	return (map);
+}
+
+void	free_map(char **map, int height)
+{
+	int	i;
+
+	if (!map)
+		return ;
+	i = 0;
+	while (i < height && map[i])
 	{
 		free(map[i]);
+		map[i] = NULL;
 		i++;
 	}
 	free(map);
-}
-
-int	count_lines(const char *filename)
-{
-	int		fd;
-	int		lines;
-	char	*line;
-
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		return (-1); // Erreur d'ouverture
-	lines = 0;
-	line = get_next_line(fd);
-	while (line)
-	{
-		lines++;
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-	return (lines);
+	map = NULL;
 }

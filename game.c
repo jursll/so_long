@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:45:33 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/10 19:27:12 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/10 20:08:52 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 int	handle_key(int keycode, t_game *game)
 {
 	if (keycode == ESC)
-	{
-		ft_printf("ESC pressed. Closing game...\n");
 		close_game(game);
-	}
 	else if (keycode == LEFT || keycode == A)
 		move_player(game, -1, 0);
 	else if (keycode == UP || keycode == W)
@@ -27,22 +24,22 @@ int	handle_key(int keycode, t_game *game)
 		move_player(game, 1, 0);
 	else if (keycode == DOWN || keycode == S)
 		move_player(game, 0, 1);
-	else if (keycode == 65451) // '+'
+	else if (keycode == PLUS) // '+'
 	{
-		game->window_width += 100;
-		game->window_height += 100;
-		ft_printf("Increasing window size to %dx%d\n", game->window_width, game->window_height);
+		game->tile_size += 64;
+		if (game->tile_size > 512)
+			game->tile_size = 512; // Limite maximale
 		resize_and_render(game);
 	}
-	else if (keycode == 65453) // '-'
+	else if (keycode == MINUS) // '-'
 	{
-		if (game->window_width > 200 && game->window_height > 200)
+		if (game->tile_size > 64)
 		{
-			game->window_width -= 100;
-			game->window_height -= 100;
-			ft_printf("Decreasing window size to %dx%d\n", game->window_width, game->window_height);
+			game->tile_size -= 64;
 			resize_and_render(game);
 		}
+		else
+			ft_printf("Tile size cannot be smaller than 64.\n");
 	}
 	return (0);
 }

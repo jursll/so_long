@@ -6,22 +6,23 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:49:35 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/10 19:19:10 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/10 20:20:03 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/so_long.h"
 
-void	render_tile(t_game *game, int x, int y, int tile_size)
+void render_tile(t_game *game, int x, int y, int tile_size)
 {
-	char	cell;
+	char cell;
 
 	if (y < 0 || y >= game->map.height || x < 0 || x >= game->map.width)
-	{
-		ft_printf("Error: Out-of-bounds access at [%d][%d]\n", y, x);
-		return ;
-	}
+		return;
+
+	// Récupération de la valeur de la cellule (caractère et non pointeur)
 	cell = game->map.grid[y][x];
+
+	// Affichage des textures correspondantes
 	if (cell == WALL && game->textures[0])
 		mlx_put_image_to_window(game->mlx, game->window,
 			game->textures[0], x * tile_size, y * tile_size);
@@ -43,14 +44,8 @@ void	render_map(t_game *game)
 {
 	int	x;
 	int	y;
-	int	tile_size;
 
-	// Recalculer la taille des tiles en fonction des dimensions de la fenêtre
-	tile_size = game->window_width / game->map.width;
-	if (game->window_height / game->map.height < tile_size)
-		tile_size = game->window_height / game->map.height;
-
-	ft_printf("Rendering map: Tile size = %d\n", tile_size);
+	ft_printf("Rendering map with tile size: %d\n", game->tile_size);
 
 	y = 0;
 	while (y < game->map.height)
@@ -58,7 +53,7 @@ void	render_map(t_game *game)
 		x = 0;
 		while (x < game->map.width)
 		{
-			render_tile(game, x, y, tile_size); // Utiliser le nouveau tile_size
+			render_tile(game, x, y, game->tile_size);
 			x++;
 		}
 		y++;
@@ -67,24 +62,22 @@ void	render_map(t_game *game)
 
 void	resize_and_render(t_game *game)
 {
-	// Détruire la fenêtre actuelle
-	mlx_destroy_window(game->mlx, game->window);
+	// Fermez et libérez l'ancienne fenêtre
+	if (game->window)
+		mlx_destroy_window(game->mlx, game->window);
 
-	// Créer une nouvelle fenêtre avec les nouvelles dimensions
-	game->window = mlx_new_window(game->mlx, game->window_width,
-			game->window_height, "So Long");
+	// Recréez la fenêtre avec les nouvelles dimensions
+	game->window_width = game->map.width * game->tile_size;
+	game->window_height = game->map.height * game->tile_size;
 
+	game->window = mlx_new_window(game->mlx, game->window_width, game->window_height, "So Long");
 	if (!game->window)
 	{
-		ft_printf("ERROR: Failed to resize the window\n");
-		close_game(game);
+		ft_printf("ERROR: Failed to create resized window\n");
+		exit(EXIT_FAILURE);
 	}
 
-	// Reconfigurer les hooks après la recréation de la fenêtre
-	mlx_hook(game->window, 2, 1L << 0, handle_key, game);
-	mlx_hook(game->window, 17, 0, close_game, game);
-
-	// Re-render la carte avec les nouvelles dimensions
+	// Réaffichez la carte avec les nouvelles dimensions
 	render_map(game);
 }
 

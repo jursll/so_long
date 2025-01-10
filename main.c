@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 18:38:27 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/10 19:15:49 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/10 20:09:14 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ void	init_game(t_game *game)
 	game->player_moves = 0;
 	game->player_pos.x = -1;
 	game->player_pos.y = -1;
-	game->window_width = 800; // Largeur par défaut
-	game->window_height = 600; // Hauteur par défaut
+	game->window_width = 0;
+	game->window_height = 0;
+	game->tile_size = 64;
 	i = 0;
 	while (i < 5)
 	{
@@ -57,18 +58,14 @@ void	cleanup(t_game *game)
 
 	if (game->window)
 		mlx_destroy_window(game->mlx, game->window);
-	i = 0;
-	while (i < 5)
+	for (i = 0; i < 5; i++)
 	{
 		if (game->textures[i])
 			mlx_destroy_image(game->mlx, game->textures[i]);
-		i++;
 	}
 	if (game->mlx)
-	{
 		mlx_destroy_display(game->mlx);
-		free(game->mlx);
-	}
+	free(game->mlx);
 	if (game->map.grid)
 		free_map(game->map.grid, game->map.height);
 }
@@ -77,6 +74,7 @@ int	main(int argc, char **argv)
 {
 	t_game	game;
 
+	// Initialisez la structure du jeu
 	init_game(&game);
 
 	// Vérifiez le nombre d'arguments
@@ -98,9 +96,11 @@ int	main(int argc, char **argv)
 	if (!game.mlx)
 		return (ft_printf("ERROR: Failed to initialize MiniLibX\n"), 1);
 
-	// Créez une fenêtre
-	game.window_width = game.map.width * 64;
-	game.window_height = game.map.height * 64;
+	// Calcul de la taille initiale de la fenêtre
+	game.window_width = game.map.width * game.tile_size;
+	game.window_height = game.map.height * game.tile_size;
+
+	// Créez la fenêtre
 	game.window = mlx_new_window(game.mlx, game.window_width, game.window_height, "So Long");
 	if (!game.window)
 		return (ft_printf("ERROR: Failed to create window\n"), 1);

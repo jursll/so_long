@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:49:35 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/10 20:20:03 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 11:11:26 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,27 +58,6 @@ void	render_map(t_game *game)
 		}
 		y++;
 	}
-}
-
-void	resize_and_render(t_game *game)
-{
-	// Fermez et libérez l'ancienne fenêtre
-	if (game->window)
-		mlx_destroy_window(game->mlx, game->window);
-
-	// Recréez la fenêtre avec les nouvelles dimensions
-	game->window_width = game->map.width * game->tile_size;
-	game->window_height = game->map.height * game->tile_size;
-
-	game->window = mlx_new_window(game->mlx, game->window_width, game->window_height, "So Long");
-	if (!game->window)
-	{
-		ft_printf("ERROR: Failed to create resized window\n");
-		exit(EXIT_FAILURE);
-	}
-
-	// Réaffichez la carte avec les nouvelles dimensions
-	render_map(game);
 }
 
 void	load_textures(t_game *game)

@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:25:04 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/10 20:20:10 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 11:11:52 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@
 # define DOWN 65364
 # define D 100
 # define RIGHT 65363
-# define PLUS 65451
-# define MINUS 65453
 
 typedef struct	s_position
 {
@@ -84,10 +82,9 @@ int		find_player_position(t_game *game);
 int		validate_walls(t_game *game);
 int		validate_path(t_game *game);
 
-//		render.c (4)
+//		render.c (3)
 void	render_map(t_game *game);
 void	render_tile(t_game *game, int x, int y, int tile_size);
-void	resize_and_render(t_game *game);
 void	load_textures(t_game *game);
 
 //		game.c (2)

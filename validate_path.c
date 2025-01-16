@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 12:37:53 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/10 18:01:57 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 11:31:33 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,29 +68,38 @@ int	validate_walls(t_game *game)
 	return (1);
 }
 
-static void	flood_fill(char **grid, int x, int y, t_game *game)
+static void	flood_fill(char **grid, int x, int y, t_game *game, int *reached_exit)
 {
 	if (x < 0 || y < 0 || x >= game->map.height || y >= game->map.width)
-		return ;
+		return;
 	if (grid[x][y] == WALL || grid[x][y] == 'F') // F pour "flooded"
-		return ;
-	if (grid[x][y] == COLLECTIBLE)
-		game->map.collect_count--;
+		return;
 	if (grid[x][y] == EXIT)
-		game->map.exit_count--;
-	grid[x][y] = 'F';
+	{
+		*reached_exit = 1; // Indique qu'on peut atteindre la sortie
+		return; // On ne continue pas après l'exit
+	}
+	if (grid[x][y] == COLLECTIBLE)
+		game->map.collect_count--; // Collectible atteint
 
-	flood_fill(grid, x + 1, y, game);
-	flood_fill(grid, x - 1, y, game);
-	flood_fill(grid, x, y + 1, game);
-	flood_fill(grid, x, y - 1, game);
+	grid[x][y] = 'F'; // Marquer comme visité
+
+	// Appel récursif pour les 4 directions
+	flood_fill(grid, x + 1, y, game, reached_exit);
+	flood_fill(grid, x - 1, y, game, reached_exit);
+	flood_fill(grid, x, y + 1, game, reached_exit);
+	flood_fill(grid, x, y - 1, game, reached_exit);
 }
 
 int	validate_path(t_game *game)
 {
 	char	**temp_grid;
 	int		i;
+	int		reached_exit;
 
+	reached_exit = 0; // Reset du flag avant chaque validation
+
+	// Allouer une copie de la carte
 	temp_grid = allocate_map(game->map.height);
 	if (!temp_grid)
 		return (ft_printf("ERROR: Memory allocation failed for flood fill\n"), 0);
@@ -106,16 +115,22 @@ int	validate_path(t_game *game)
 	}
 
 	// Lancement du flood fill
-	flood_fill(temp_grid, game->player_pos.y, game->player_pos.x, game);
+	flood_fill(temp_grid, game->player_pos.y, game->player_pos.x, game, &reached_exit);
 
-	// Vérifie si tous les collectibles et la sortie sont atteints
-	if (game->map.collect_count > 0 || game->map.exit_count > 0)
+	// Validation après le flood fill
+	if (game->map.collect_count > 0)
 	{
-		ft_printf("ERROR: Not all collectibles or the exit are reachable\n");
+		ft_printf("ERROR: Not all collectibles are reachable\n");
+		free_map(temp_grid, game->map.height);
+		return (0);
+	}
+	if (!reached_exit)
+	{
+		ft_printf("ERROR: Exit is not reachable\n");
 		free_map(temp_grid, game->map.height);
 		return (0);
 	}
 
 	free_map(temp_grid, game->map.height);
-	return (1);
+	return (1); // Tout est accessible
 }

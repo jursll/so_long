@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:45:33 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/10 20:08:52 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 11:10:45 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,6 @@ int	handle_key(int keycode, t_game *game)
 		move_player(game, 1, 0);
 	else if (keycode == DOWN || keycode == S)
 		move_player(game, 0, 1);
-	else if (keycode == PLUS) // '+'
-	{
-		game->tile_size += 64;
-		if (game->tile_size > 512)
-			game->tile_size = 512; // Limite maximale
-		resize_and_render(game);
-	}
-	else if (keycode == MINUS) // '-'
-	{
-		if (game->tile_size > 64)
-		{
-			game->tile_size -= 64;
-			resize_and_render(game);
-		}
-		else
-			ft_printf("Tile size cannot be smaller than 64.\n");
-	}
 	return (0);
 }
 

@@ -6,13 +6,11 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 18:38:27 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 13:33:33 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:18:17 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* compile with
-gcc -Wall -Wextra -Werror -o so_long main.c map.c so_long.a -lm -lXext -lX11
-
 gcc -Wall -Wextra -Werror -o so_long main.c so_long.a -Llibft -lft -Lminilibx -lmlx -lm -lXext -lX11
 */
 
@@ -53,17 +51,20 @@ int	close_game(t_game *game)
 	return (0);
 }
 
-void	cleanup(t_game *game)
+void cleanup(t_game *game)
 {
-	int	i;
-
 	if (game->window)
 		mlx_destroy_window(game->mlx, game->window);
-	for (i = 0; i < 5; i++)
-	{
-		if (game->textures[i])
-			mlx_destroy_image(game->mlx, game->textures[i]);
-	}
+	if (game->textures[0])
+		mlx_destroy_image(game->mlx, game->textures[0]);
+	if (game->textures[1])
+		mlx_destroy_image(game->mlx, game->textures[1]);
+	if (game->textures[2])
+		mlx_destroy_image(game->mlx, game->textures[2]);
+	if (game->textures[3])
+		mlx_destroy_image(game->mlx, game->textures[3]);
+	if (game->textures[4])
+		mlx_destroy_image(game->mlx, game->textures[4]);
 	if (game->mlx)
 		mlx_destroy_display(game->mlx);
 	free(game->mlx);
@@ -75,46 +76,26 @@ int	main(int argc, char **argv)
 {
 	t_game	game;
 
-	// Initialisez la structure du jeu
 	init_game(&game);
-
-	// Vérifiez le nombre d'arguments
 	if (argc != 2)
 		return (ft_printf("Usage: ./so_long maps/map.ber\n"), 1);
-
-	// Chargez la carte
 	if (!read_map(argv[1], &game))
 		return (1);
-
-	// Validez la carte
 	if (!validate_map(&game))
 		return (free_map(game.map.grid, game.map.height), 1);
-
-	ft_printf("Map is valid! Width: %d, Height: %d\n", game.map.width, game.map.height);
-
-	// Initialisez MiniLibX
 	game.mlx = mlx_init();
 	if (!game.mlx)
 		return (ft_printf("Error\nFailed to initialize MiniLibX\n"), 1);
-
-	// Calcul de la taille initiale de la fenêtre
 	game.window_width = game.map.width * game.tile_size;
 	game.window_height = game.map.height * game.tile_size;
-
-	// Créez la fenêtre
-	game.window = mlx_new_window(game.mlx, game.window_width, game.window_height, "So Long");
+	game.window = mlx_new_window(game.mlx, game.window_width,
+		game.window_height, "So Long");
 	if (!game.window)
 		return (ft_printf("Error\nFailed to create window\n"), 1);
-
-	ft_printf("Window created with dimensions: %d x %d\n", game.window_width, game.window_height);
-
-	// Chargez les textures
 	load_textures(&game);
-
-	// Affichez la carte
 	render_map(&game);
 
-	// Configurez les hooks pour les événements
+	
 	mlx_hook(game.window, 2, 1L << 0, handle_key, &game); // Gestion des touches
 	mlx_hook(game.window, 17, 0, close_game, &game);      // Gestion de la fermeture
 

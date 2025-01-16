@@ -6,11 +6,35 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:45:33 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 14:19:54 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:45:56 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/so_long.h"
+
+int	find_player_position(t_game *game)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < game->map.height)
+	{
+		j = 0;
+		while (game->map.grid[i][j])
+		{
+			if (game->map.grid[i][j] == PLAYER)
+			{
+				game->player_pos.y = i;
+				game->player_pos.x = j;
+				return (1);
+			}
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
 
 int	handle_key(int keycode, t_game *game)
 {

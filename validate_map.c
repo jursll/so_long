@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 12:20:51 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 14:31:16 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:43:42 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,13 @@ static int	validate_rectangular(t_game *game)
 		ft_printf("Error\nMap dimensions are invalid.\n");
 		return (0);
 	}
-
 	i = 0;
 	while (i < game->map.height)
 	{
 		line_length = ft_strlen(game->map.grid[i]);
-		ft_printf("Validating line %d: %s (length: %d)\n", i, game->map.grid[i], line_length);
 		if (line_length != game->map.width)
 		{
-			ft_printf("Error\nMap is not rectangular (line %d has length %d, expected %d)\n",
-				i, line_length, game->map.width);
+			ft_printf("Error\nMap is not rectangular\n");
 			return (0);
 		}
 		i++;
@@ -70,47 +67,25 @@ static int	validate_characters(t_game *game)
 
 static int	validate_elements(t_game *game)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < game->map.height)
-	{
-		j = 0;
-		while (game->map.grid[i][j])
-		{
-			if (game->map.grid[i][j] == PLAYER)
-				game->map.player_count++;
-			else if (game->map.grid[i][j] == COLLECTIBLE)
-				game->map.collect_count++;
-			else if (game->map.grid[i][j] == EXIT)
-				game->map.exit_count++;
-			j++;
-		}
-		i++;
-	}
-
-	// Vérifier le nombre de joueurs
+	count_map_elements(game);
 	if (game->map.player_count != 1)
 	{
-		ft_printf("Error\nMap must have exactly 1 player (found %d)\n", game->map.player_count);
+		ft_printf("Error\nMap must have exactly 1 player (found %d)\n",
+			game->map.player_count);
 		return (0);
 	}
-
-	// Vérifier les collectibles
 	if (game->map.collect_count < 1)
 	{
-		ft_printf("Error\nMap must have at least 1 collectible (found %d)\n", game->map.collect_count);
+		ft_printf("Error\nMap must have at least 1 collectible (found %d)\n",
+			game->map.collect_count);
 		return (0);
 	}
-
-	// Vérifier le nombre de sorties
 	if (game->map.exit_count != 1)
 	{
-		ft_printf("Error\nMap must have exactly 1 exit (found %d)\n", game->map.exit_count);
+		ft_printf("Error\nMap must have exactly 1 exit (found %d)\n",
+			game->map.exit_count);
 		return (0);
 	}
-
 	return (1);
 }
 
@@ -121,34 +96,18 @@ int	validate_map(t_game *game)
 		ft_printf("Error\nMap is empty or not loaded\n");
 		return (0);
 	}
-
-	// Détecte et affiche la largeur de la carte
 	game->map.width = ft_strlen(game->map.grid[0]);
-	ft_printf("Detected map width: %d\n", game->map.width);
-
-	// Vérifie si la carte est rectangulaire et les dimensions
 	if (!validate_rectangular(game))
 		return (0);
-
-	// Vérifie les caractères valides
 	if (!validate_characters(game))
 		return (0);
-
-	// Vérifie les éléments obligatoires (P, C, E)
 	if (!validate_elements(game))
 		return (0);
-
-	// Trouve et stocke la position du joueur
 	if (!find_player_position(game))
 		return (0);
-
-	// Vérifie que la carte est fermée par des murs
 	if (!validate_walls(game))
 		return (0);
-
-	// Vérifie si tous les collectibles et la sortie sont accessibles
 	if (!validate_path(game))
 		return (0);
-
 	return (1);
 }

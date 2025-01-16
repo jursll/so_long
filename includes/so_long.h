@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:25:04 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 14:18:44 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:06:39 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,12 @@ typedef struct	s_game
 	void		*textures[5];
 }				t_game;
 
+typedef struct	s_flood_fill_args
+{
+	int			*reached_exit;
+	t_game		*game;
+}				t_flood_fill_args;
+
 //		utils.c (2)
 char	**allocate_map(int height);
 void	free_map(char **map, int lines);
@@ -78,17 +84,23 @@ char	**read_map(char *filename, t_game *game);
 //		validate_map.c (5)
 int		validate_map(t_game *game);
 
-//		validate_path.c (4)
-int		find_player_position(t_game *game);
-int		validate_walls(t_game *game);
+//		validate_utils.c (2)
+void	count_map_elements(t_game *game);
+void	flood_fill(char **grid, int x, int y, t_flood_fill_args *args);
+
+//		validate_path.c (3)
 int		validate_path(t_game *game);
+
+//		validate_walls.c (3)
+int		validate_walls(t_game *game);
 
 //		render.c (3)
 void	render_map(t_game *game);
 void	render_tile(t_game *game, int x, int y, int tile_size);
 void	load_textures(t_game *game);
 
-//		game.c (3)
+//		game.c (4)
+int		find_player_position(t_game *game);
 int		handle_key(int keycode, t_game *game);
 void	move_player(t_game *game, int dx, int dy);
 

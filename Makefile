@@ -6,7 +6,7 @@
 #    By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/05 17:29:03 by julrusse          #+#    #+#              #
-#    Updated: 2025/01/10 17:21:00 by julrusse         ###   ########.fr        #
+#    Updated: 2025/01/16 16:04:49 by julrusse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,8 @@ SRC =	read_map.c \
 		utils.c \
 		validate_map.c \
 		validate_path.c \
+		validate_utils.c \
+		validate_walls.c \
 		render.c \
 		game.c \
 		main.c

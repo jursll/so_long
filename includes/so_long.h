@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:25:04 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 16:06:39 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:46:17 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,12 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-// GAME OBJECTS KEYS
 # define PLAYER 'P'
 # define EXIT 'E'
 # define COLLECTIBLE 'C'
 # define WALL '1'
 # define FLOOR '0'
 
-// GAME KEYWORDS
 # define ESC 65307
 # define W 119
 # define UP 65362
@@ -38,13 +36,13 @@
 # define D 100
 # define RIGHT 65363
 
-typedef struct	s_position
+typedef struct s_position
 {
 	int			x;
 	int			y;
 }				t_position;
 
-typedef struct	s_map
+typedef struct s_map
 {
 	char		**grid;
 	int			width;
@@ -54,7 +52,7 @@ typedef struct	s_map
 	int			exit_count;
 }				t_map;
 
-typedef struct	s_game
+typedef struct s_game
 {
 	t_map		map;
 	void		*mlx;
@@ -68,7 +66,7 @@ typedef struct	s_game
 	void		*textures[5];
 }				t_game;
 
-typedef struct	s_flood_fill_args
+typedef struct s_flood_fill_args
 {
 	int			*reached_exit;
 	t_game		*game;
@@ -99,7 +97,7 @@ void	render_map(t_game *game);
 void	render_tile(t_game *game, int x, int y, int tile_size);
 void	load_textures(t_game *game);
 
-//		game.c (4)
+//		game.c (5)
 int		find_player_position(t_game *game);
 int		handle_key(int keycode, t_game *game);
 void	move_player(t_game *game, int dx, int dy);

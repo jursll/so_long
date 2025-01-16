@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 18:38:27 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 16:18:17 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:51:10 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,12 @@ void	init_game(t_game *game)
 
 int	close_game(t_game *game)
 {
-	ft_printf("Closing game...\n");
 	cleanup(game);
 	exit(0);
 	return (0);
 }
 
-void cleanup(t_game *game)
+void	cleanup(t_game *game)
 {
 	if (game->window)
 		mlx_destroy_window(game->mlx, game->window);
@@ -89,21 +88,14 @@ int	main(int argc, char **argv)
 	game.window_width = game.map.width * game.tile_size;
 	game.window_height = game.map.height * game.tile_size;
 	game.window = mlx_new_window(game.mlx, game.window_width,
-		game.window_height, "So Long");
+			game.window_height, "So Long");
 	if (!game.window)
 		return (ft_printf("Error\nFailed to create window\n"), 1);
 	load_textures(&game);
 	render_map(&game);
-
-	
-	mlx_hook(game.window, 2, 1L << 0, handle_key, &game); // Gestion des touches
-	mlx_hook(game.window, 17, 0, close_game, &game);      // Gestion de la fermeture
-
-	// Boucle principale de MiniLibX
+	mlx_hook(game.window, 2, 1L << 0, handle_key, &game);
+	mlx_hook(game.window, 17, 0, close_game, &game);
 	mlx_loop(game.mlx);
-
-	// Libérez la mémoire de la carte (ne sera exécuté qu'en cas de fermeture propre)
 	free_map(game.map.grid, game.map.height);
-
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:45:33 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 15:45:56 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:38:07 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,22 @@ static int	count_collectibles(char **grid, int height, int width)
 	return (count);
 }
 
+static void	handle_exit(t_game *game)
+{
+	game->map.collect_count = count_collectibles(game->map.grid,
+			game->map.height, game->map.width);
+	if (game->map.collect_count > 0)
+	{
+		ft_printf("Game Over! %d moves, not all fish eaten\n",
+			game->player_moves + 1);
+	}
+	else
+	{
+		ft_printf("You win! %d moves\n", game->player_moves + 1);
+	}
+	close_game(game);
+}
+
 void	move_player(t_game *game, int dx, int dy)
 {
 	int	new_x;
@@ -80,45 +96,18 @@ void	move_player(t_game *game, int dx, int dy)
 
 	new_x = game->player_pos.x + dx;
 	new_y = game->player_pos.y + dy;
-
-	// Vérifie si le déplacement est valide (pas de mur)
 	if (game->map.grid[new_y][new_x] != WALL)
 	{
 		if (game->map.grid[new_y][new_x] == EXIT)
-		{
-			game->map.collect_count = count_collectibles(game->map.grid, game->map.height, game->map.width);
-			if (game->map.collect_count > 0)
-			{
-				ft_printf("Game Over! You reached the exit in %d moves but didn't collect all the collectibles.\n",
-					game->player_moves + 1);
-			}
-			else
-			{
-				ft_printf("Congratulations! You reached the exit in %d moves.\n",
-					game->player_moves + 1);
-			}
-			close_game(game); // Ferme le jeu
-		}
-
-		// Met à jour la carte pour déplacer le joueur
+			handle_exit(game);
 		if (game->map.grid[new_y][new_x] == COLLECTIBLE)
 			game->map.collect_count--;
-
-		game->map.grid[game->player_pos.y][game->player_pos.x] = FLOOR; // Ancienne position
+		game->map.grid[game->player_pos.y][game->player_pos.x] = FLOOR;
 		game->player_pos.x = new_x;
 		game->player_pos.y = new_y;
-		game->map.grid[new_y][new_x] = PLAYER; // Nouvelle position
-
-		// Incrémente les mouvements
+		game->map.grid[new_y][new_x] = PLAYER;
 		game->player_moves++;
-		ft_printf("Player moved to [%d][%d]. Total moves: %d\n",
-			new_y, new_x, game->player_moves);
-
-		// Re-render la carte
+		ft_printf("Total moves: %d\n", game->player_moves);
 		render_map(game);
-	}
-	else
-	{
-		ft_printf("Blocked by wall at [%d][%d]\n", new_y, new_x);
 	}
 }

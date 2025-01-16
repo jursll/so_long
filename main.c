@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 18:38:27 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 10:43:45 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:33:33 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	init_game(t_game *game)
 	game->window_width = 0;
 	game->window_height = 0;
 	game->tile_size = 64;
+	game->shortest_path = 0;
 	i = 0;
 	while (i < 5)
 	{
@@ -94,7 +95,7 @@ int	main(int argc, char **argv)
 	// Initialisez MiniLibX
 	game.mlx = mlx_init();
 	if (!game.mlx)
-		return (ft_printf("ERROR: Failed to initialize MiniLibX\n"), 1);
+		return (ft_printf("Error\nFailed to initialize MiniLibX\n"), 1);
 
 	// Calcul de la taille initiale de la fenêtre
 	game.window_width = game.map.width * game.tile_size;
@@ -103,7 +104,7 @@ int	main(int argc, char **argv)
 	// Créez la fenêtre
 	game.window = mlx_new_window(game.mlx, game.window_width, game.window_height, "So Long");
 	if (!game.window)
-		return (ft_printf("ERROR: Failed to create window\n"), 1);
+		return (ft_printf("Error\nFailed to create window\n"), 1);
 
 	ft_printf("Window created with dimensions: %d x %d\n", game.window_width, game.window_height);
 

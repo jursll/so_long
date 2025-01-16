@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:45:33 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 11:10:45 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:19:54 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,28 @@ int	handle_key(int keycode, t_game *game)
 	return (0);
 }
 
+static int	count_collectibles(char **grid, int height, int width)
+{
+	int	x;
+	int	y;
+	int	count;
+
+	count = 0;
+	y = 0;
+	while (y < height)
+	{
+		x = 0;
+		while (x < width)
+		{
+			if (grid[y][x] == COLLECTIBLE)
+				count++;
+			x++;
+		}
+		y++;
+	}
+	return (count);
+}
+
 void	move_player(t_game *game, int dx, int dy)
 {
 	int	new_x;
@@ -40,9 +62,18 @@ void	move_player(t_game *game, int dx, int dy)
 	{
 		if (game->map.grid[new_y][new_x] == EXIT)
 		{
-			ft_printf("Congratulations! You reached the exit in %d moves.\n",
-				game->player_moves + 1);
-			close_game(game);
+			game->map.collect_count = count_collectibles(game->map.grid, game->map.height, game->map.width);
+			if (game->map.collect_count > 0)
+			{
+				ft_printf("Game Over! You reached the exit in %d moves but didn't collect all the collectibles.\n",
+					game->player_moves + 1);
+			}
+			else
+			{
+				ft_printf("Congratulations! You reached the exit in %d moves.\n",
+					game->player_moves + 1);
+			}
+			close_game(game); // Ferme le jeu
 		}
 
 		// Met à jour la carte pour déplacer le joueur

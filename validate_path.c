@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 12:37:53 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 11:31:33 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:59:35 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	find_player_position(t_game *game)
 		}
 		i++;
 	}
-	ft_printf("ERROR: No player position (P) found in map\n");
+	ft_printf("Error\nNo player position (P) found in map\n");
 	return (0);
 }
 
@@ -48,7 +48,7 @@ int	validate_walls(t_game *game)
 	{
 		if (game->map.grid[0][i] != WALL || game->map.grid[game->map.height - 1][i] != WALL)
 		{
-			ft_printf("ERROR: Map is not closed by walls at top/bottom\n");
+			ft_printf("Error\nMap is not closed by walls at top/bottom\n");
 			return (0);
 		}
 		i++;
@@ -60,7 +60,7 @@ int	validate_walls(t_game *game)
 	{
 		if (game->map.grid[i][0] != WALL || game->map.grid[i][game->map.width - 1] != WALL)
 		{
-			ft_printf("ERROR: Map is not closed by walls at left/right (line %d)\n", i);
+			ft_printf("Error\nMap is not closed by walls at left/right (line %d)\n", i);
 			return (0);
 		}
 		i++;
@@ -102,7 +102,7 @@ int	validate_path(t_game *game)
 	// Allouer une copie de la carte
 	temp_grid = allocate_map(game->map.height);
 	if (!temp_grid)
-		return (ft_printf("ERROR: Memory allocation failed for flood fill\n"), 0);
+		return (ft_printf("Error\nMemory allocation failed for flood fill\n"), 0);
 
 	// Copie de la carte pour le flood fill
 	i = 0;
@@ -120,17 +120,16 @@ int	validate_path(t_game *game)
 	// Validation après le flood fill
 	if (game->map.collect_count > 0)
 	{
-		ft_printf("ERROR: Not all collectibles are reachable\n");
+		ft_printf("Error\nNot all collectibles are reachable\n");
 		free_map(temp_grid, game->map.height);
 		return (0);
 	}
 	if (!reached_exit)
 	{
-		ft_printf("ERROR: Exit is not reachable\n");
+		ft_printf("Error\nExit is not reachable\n");
 		free_map(temp_grid, game->map.height);
 		return (0);
 	}
-
 	free_map(temp_grid, game->map.height);
 	return (1); // Tout est accessible
 }

@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:25:04 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 11:11:52 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:18:44 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct	s_game
 	int			window_width;
 	int			window_height;
 	int			tile_size;
+	int			shortest_path;
 	void		*textures[5];
 }				t_game;
 
@@ -87,7 +88,7 @@ void	render_map(t_game *game);
 void	render_tile(t_game *game, int x, int y, int tile_size);
 void	load_textures(t_game *game);
 
-//		game.c (2)
+//		game.c (3)
 int		handle_key(int keycode, t_game *game);
 void	move_player(t_game *game, int dx, int dy);
 

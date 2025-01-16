@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 22:35:22 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/10 18:01:09 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:03:57 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	fill_map(int fd, char **map, int *height)
 		line = get_next_line(fd);
 		if (!line)
 		{
-			ft_printf("ERROR: Unexpected end of file at line %d\n", y);
+			ft_printf("Error\nUnexpected end of file at line %d\n", y);
 			*height = y; // Ajuste la hauteur réelle si une ligne manque
 			return (0);
 		}
@@ -79,18 +79,18 @@ char	**read_map(char *filename, t_game *game)
 	// Compte le nombre de lignes dans le fichier
 	game->map.height = count_lines(filename);
 	if (game->map.height <= 0)
-		return (ft_printf("ERROR: Invalid or empty map file\n"), NULL);
+		return (ft_printf("Error\nInvalid or empty map file\n"), NULL);
 	ft_printf("Detected map has %d lines\n", game->map.height);
 
 	// Alloue la mémoire pour le tableau de la carte
 	game->map.grid = allocate_map(game->map.height);
 	if (!game->map.grid)
-		return (ft_printf("ERROR: Memory allocation failed for map\n"), NULL);
+		return (ft_printf("Error\nMemory allocation failed for map\n"), NULL);
 
 	// Ouvre le fichier
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-		return (ft_printf("ERROR: Cannot open map file\n"), free_map(game->map.grid, 0), NULL);
+		return (ft_printf("Error\nCannot open map file\n"), free_map(game->map.grid, 0), NULL);
 
 	// Remplit la carte avec les données du fichier
 	if (!fill_map(fd, game->map.grid, &game->map.height))

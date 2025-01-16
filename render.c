@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:49:35 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 11:11:26 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:04:10 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	load_textures(t_game *game)
 	{
 		if (!game->textures[i])
 		{
-			ft_printf("ERROR: Texture %d failed to load\n", i);
+			ft_printf("Error\nTexture %d failed to load\n", i);
 			exit(EXIT_FAILURE);
 		}
 	}

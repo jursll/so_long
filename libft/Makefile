@@ -6,7 +6,7 @@
 #    By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/06 14:53:31 by julrusse          #+#    #+#              #
-#    Updated: 2025/01/17 12:33:56 by julrusse         ###   ########.fr        #
+#    Updated: 2025/01/17 14:28:25 by julrusse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,7 +70,7 @@ clean:
 	rm -rf $(OBJ_DIR)
 
 fclean:	clean
-	rm -f $(NAME)
+	rm -rf $(NAME)
 
 re: fclean all
 

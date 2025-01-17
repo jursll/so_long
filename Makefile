@@ -6,7 +6,7 @@
 #    By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/05 17:29:03 by julrusse          #+#    #+#              #
-#    Updated: 2025/01/17 12:31:40 by julrusse         ###   ########.fr        #
+#    Updated: 2025/01/17 14:29:14 by julrusse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,7 +75,7 @@ fclean: clean
 	@echo "Cleaning everything..."
 	@rm -f $(NAME) $(TARGET)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
-	@$(MAKE) -C $(MLX_DIR) fclean
+	@$(MAKE) -C $(MLX_DIR) clean
 
 # Recompile tout
 re: fclean all

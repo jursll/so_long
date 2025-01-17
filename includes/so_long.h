@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:25:04 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 16:46:17 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/17 15:12:36 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,15 @@ typedef struct s_flood_fill_args
 char	**allocate_map(int height);
 void	free_map(char **map, int lines);
 
-//		read_map.c (4)
+//		read_map.c (5)
+int		fill_map(int fd, char **map, int *height);
 char	**read_map(char *filename, t_game *game);
 
 //		validate_map.c (5)
 int		validate_map(t_game *game);
 
-//		validate_utils.c (2)
+//		validate_utils.c (3)
+int		check_lines_after_map(int fd, char *line);
 void	count_map_elements(t_game *game);
 void	flood_fill(char **grid, int x, int y, t_flood_fill_args *args);
 

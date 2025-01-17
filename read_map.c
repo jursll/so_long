@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 22:35:22 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 15:15:51 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/17 15:21:07 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,19 @@ static int	count_lines(const char *filename)
 	return (lines);
 }
 
+static char	*skip_empty_lines(int fd)
+{
+	char	*line;
+
+	line = get_next_line(fd);
+	while (line && (line[0] == '\0' || line[0] == '\n'))
+	{
+		free(line);
+		line = get_next_line(fd);
+	}
+	return (line);
+}
+
 static void	remove_newline(char *line)
 {
 	int	len;
@@ -43,28 +56,34 @@ static void	remove_newline(char *line)
 		line[len - 1] = '\0';
 }
 
-static int	fill_map(int fd, char **map, int *height)
+int	fill_map(int fd, char **map, int *height)
 {
 	int		y;
 	char	*line;
 
 	y = 0;
-	while (y < *height)
+	line = skip_empty_lines(fd);
+	while (line && y < *height)
 	{
+		// Si une ligne vide est rencontrée, vérifier les lignes après
+		if (line[0] == '\0' || line[0] == '\n')
+		{
+			if (!check_lines_after_map(fd, line))
+				return (0);
+			line = NULL; // Important pour éviter une double libération
+			break;
+		}
+		remove_newline(line);
+		map[y++] = line;
 		line = get_next_line(fd);
-		if (!line)
-		{
-			ft_printf("Error\nUnexpected end of file at line %d\n", y);
-			return (0);
-		}
-		if (line[0] != '\0')
-		{
-			remove_newline(line);
-			map[y++] = line;
-		}
-		else
-			free(line);
 	}
+	if (line)
+	{
+		free(line);
+		ft_printf("Error\nMap format is invalid\n");
+		return (0);
+	}
+	*height = y;
 	map[y] = NULL;
 	return (1);
 }

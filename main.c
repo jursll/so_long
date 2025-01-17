@@ -6,13 +6,9 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 18:38:27 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 16:51:10 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:11:13 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-/* compile with
-gcc -Wall -Wextra -Werror -o so_long main.c so_long.a -Llibft -lft -Lminilibx -lmlx -lm -lXext -lX11
-*/
 
 #include "includes/so_long.h"
 

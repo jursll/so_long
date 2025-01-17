@@ -6,15 +6,15 @@
 #    By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/05 17:29:03 by julrusse          #+#    #+#              #
-#    Updated: 2025/01/16 16:04:49 by julrusse         ###   ########.fr        #
+#    Updated: 2025/01/17 12:31:40 by julrusse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= so_long.a
+TARGET	= so_long
 CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror
 
-# Répertoires et fichiers
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
@@ -34,28 +34,31 @@ SRC =	read_map.c \
 		main.c
 
 OBJ_DIR = obj
-OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
+OBJ		= $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
-# Règles principales
-all: $(LIBFT) $(MLX) $(NAME)
+all: $(TARGET)
 
-# Compile la libft
 $(LIBFT):
 	@echo "Compiling libft..."
 	@$(MAKE) -C $(LIBFT_DIR)
 
-# Compile la MiniLibX
 $(MLX):
 	@echo "Compiling MiniLibX..."
 	@$(MAKE) -C $(MLX_DIR)
 
-# Compile le projet
 $(NAME): $(OBJ)
 	@echo "Creating $(NAME)..."
-	@ar rcs $(NAME) $(OBJ) $(LIBFT) $(MLX)
+	@ar rcs $(NAME) $(OBJ)
 	@ranlib $(NAME)
 
-# Compile les fichiers .c en .o
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(OBJ_DIR)
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+$(TARGET): $(LIBFT) $(MLX) $(NAME)
+	@echo "Building final executable $(TARGET)..."
+	@$(CC) $(CFLAGS) -o $(TARGET) main.c $(NAME) -Llibft -lft -Lminilibx -lmlx -lm -lXext -lX11
+
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(OBJ_DIR)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
@@ -70,8 +73,9 @@ clean:
 # Nettoyage complet
 fclean: clean
 	@echo "Cleaning everything..."
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(TARGET)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(MAKE) -C $(MLX_DIR) fclean
 
 # Recompile tout
 re: fclean all

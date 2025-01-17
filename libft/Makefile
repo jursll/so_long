@@ -6,7 +6,7 @@
 #    By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/06 14:53:31 by julrusse          #+#    #+#              #
-#    Updated: 2024/12/22 15:00:56 by julrusse         ###   ########.fr        #
+#    Updated: 2025/01/17 12:33:56 by julrusse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME	= libft.a
 CFLAGS	= -Wall -Wextra -Werror
 CC		= gcc
 
-FILES	= ft_isalpha.c \
+SRC		= ft_isalpha.c \
 		  ft_isdigit.c \
 		  ft_isalnum.c \
 		  ft_isascii.c \
@@ -54,18 +54,20 @@ FILES	= ft_isalpha.c \
 		  get_next_line.c \
 		  gnl_utils.c \
 
-OBJ		= $(FILES:.c=.o)
+OBJ_DIR = obj
+OBJ		= $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	ar rcs $(NAME) $(OBJ)
 
-%.o: %.c
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ)
+	rm -rf $(OBJ_DIR)
 
 fclean:	clean
 	rm -f $(NAME)

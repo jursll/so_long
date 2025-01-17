@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:25:04 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/17 15:12:36 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/17 16:42:03 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ char	**read_map(char *filename, t_game *game);
 //		validate_map.c (5)
 int		validate_map(t_game *game);
 
-//		validate_utils.c (3)
+//		validate_utils.c (4)
+int		handle_remaining_line(char *line);
 int		check_lines_after_map(int fd, char *line);
 void	count_map_elements(t_game *game);
 void	flood_fill(char **grid, int x, int y, t_flood_fill_args *args);
@@ -99,7 +100,7 @@ void	render_map(t_game *game);
 void	render_tile(t_game *game, int x, int y, int tile_size);
 void	load_textures(t_game *game);
 
-//		game.c (5)
+//		game.c (4)
 int		find_player_position(t_game *game);
 int		handle_key(int keycode, t_game *game);
 void	move_player(t_game *game, int dx, int dy);

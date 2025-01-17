@@ -6,11 +6,22 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 12:37:53 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/17 15:13:46 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/17 16:51:26 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/so_long.h"
+
+int	handle_remaining_line(char *line)
+{
+	if (line)
+	{
+		free(line);
+		ft_printf("Error\nMap format is invalid\n");
+		return (0);
+	}
+	return (1);
+}
 
 int	check_lines_after_map(int fd, char *line)
 {

@@ -6,7 +6,7 @@
 /*   By: julrusse <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:45:33 by julrusse          #+#    #+#             */
-/*   Updated: 2025/01/16 16:38:07 by julrusse         ###   ########.fr       */
+/*   Updated: 2025/01/17 16:50:26 by julrusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,22 @@ static int	count_collectibles(char **grid, int height, int width)
 {
 	int	x;
 	int	y;
-	int	count;
+	int	collectibles;
 
-	count = 0;
 	y = 0;
+	collectibles = 0;
 	while (y < height)
 	{
 		x = 0;
 		while (x < width)
 		{
 			if (grid[y][x] == COLLECTIBLE)
-				count++;
+				collectibles++;
 			x++;
 		}
 		y++;
 	}
-	return (count);
+	return (collectibles);
 }
 
 static void	handle_exit(t_game *game)
@@ -79,14 +79,14 @@ static void	handle_exit(t_game *game)
 			game->map.height, game->map.width);
 	if (game->map.collect_count > 0)
 	{
-		ft_printf("Game Over! %d moves, not all fish eaten\n",
-			game->player_moves + 1);
+		ft_printf("You cannot exit yet! %d fish left to collect\n",
+			game->map.collect_count);
 	}
 	else
 	{
 		ft_printf("You win! %d moves\n", game->player_moves + 1);
+		close_game(game);
 	}
-	close_game(game);
 }
 
 void	move_player(t_game *game, int dx, int dy)
@@ -99,7 +99,10 @@ void	move_player(t_game *game, int dx, int dy)
 	if (game->map.grid[new_y][new_x] != WALL)
 	{
 		if (game->map.grid[new_y][new_x] == EXIT)
+		{
 			handle_exit(game);
+			return ;
+		}
 		if (game->map.grid[new_y][new_x] == COLLECTIBLE)
 			game->map.collect_count--;
 		game->map.grid[game->player_pos.y][game->player_pos.x] = FLOOR;
